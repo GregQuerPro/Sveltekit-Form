@@ -23,28 +23,36 @@
     <p>Chargement Maison...</p>
 {:then data}
     {#each data as property}
-        <div class="house-ctn">
-            {#each property.floors as floor}
-                <div class="house-btn" on:click={handleFloorCtnClick}>
+        <div class="house-ctn show">
+            {#each property.floors as floor, a}
+                <div
+                    class="house-btn"
+                    data-floor={a}
+                    on:keypress={handleFloorCtnClick}
+                >
                     <div class="house-btn-item">{floor.name}</div>
-                    <div class="floor-ctn">
+                    <div class="floor-ctn hide" data-floor={a}>
                         {#each floor.rooms as room}
                             <div class="floor-btn">
                                 <div class="floor-item">{room.name}</div>
-                                <!-- <div class="item item-furnitures">
+                                <div class="room-ctn hide" data-floor={a}>
                                     {#each room.furnitures as furniture}
-                                        <div class="sub-item">
-                                            <div>{furniture.name}</div>
-                                            {#if furniture.type === "bed"}
-                                                <Bed bed={furniture} />
-                                            {:else if furniture.type === "dressing"}
-                                                <Dressing dressing={furniture} />
-                                            {:else if furniture.type === "tv"}
-                                                <Tv tv={furniture} />
-                                            {/if}
+                                        <div class="room-btn">
+                                            <div class="room-item">
+                                                <div>{furniture.name}</div>
+                                                {#if furniture.type === "bed"}
+                                                    <Bed bed={furniture} />
+                                                {:else if furniture.type === "dressing"}
+                                                    <Dressing
+                                                        dressing={furniture}
+                                                    />
+                                                {:else if furniture.type === "tv"}
+                                                    <Tv tv={furniture} />
+                                                {/if}
+                                            </div>
                                         </div>
                                     {/each}
-                                </div> -->
+                                </div>
                             </div>
                         {/each}
                     </div>
@@ -58,6 +66,20 @@
 {/await}
 
 <style>
+    .show {
+        position: fixed;
+        top: 100px;
+        right: 50%;
+        width: 90%;
+        max-width: 900px;
+        transform: translateX(50%);
+    }
+
+    .hide {
+        position: fixed;
+        left: -1000px;
+    }
+
     /* House Level */
 
     .house-ctn {
@@ -119,6 +141,38 @@
     }
 
     .floor-btn-item {
+        margin-right: 20px;
+    }
+
+    /* Room Level */
+
+    .room-ctn {
+        padding: 15px;
+        border-radius: 5px;
+        background: lightgray;
+    }
+
+    .room-btn {
+        display: flex;
+        /* display: block; */
+        padding: 15px;
+        border-radius: 5px;
+        background-color: #fff;
+        margin-bottom: 10px;
+        cursor: pointer;
+        outline: 1px solid transparent;
+        transition: all ease-in-out 200ms;
+    }
+
+    .room-btn:hover {
+        outline: 1px solid #000;
+    }
+
+    .room-btn:last-child {
+        margin-bottom: 0;
+    }
+
+    .room-btn-item {
         margin-right: 20px;
     }
 </style>
