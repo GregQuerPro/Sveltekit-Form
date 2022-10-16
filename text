@@ -1,0 +1,310 @@
+<script>
+	let current = "Maison 1";
+	let floor = null;
+	let room = null;
+	
+	let data = [
+		{
+			"name": "Maison 1",
+			"floors": [
+				{
+					"name": "Etage n°1",
+					"rooms": [
+						{
+							"name": "Chambre n°1",
+							"surface": 10,
+							"furnitures": [
+								{
+									"bois": "Chêne",
+									"name": "Lit n°1",
+									"type": "bed"
+								},
+								{
+									"name": "Dressing n°1",
+									"type": "dressing",
+									"surface": 20
+								},
+								{
+									"name": "Dressing n°2",
+									"type": "dressing",
+									"surface": 10
+								},
+								{
+									"name": "TV n°1",
+									"type": "tv",
+									"definition": "4K",
+									"dimensions": [
+										20,
+										30
+									]
+								}
+							]
+						},
+						{
+							"name": "Chambre n°2",
+							"surface": 20,
+							"furnitures": [
+								{
+									"bois": "Chêne",
+									"name": "Lit n°1",
+									"type": "bed"
+								},
+								{
+									"name": "Dressing n°1",
+									"type": "dressing",
+									"surface": 30
+								},
+								{
+									"name": "Dressing n°2",
+									"type": "dressing",
+									"surface": 40
+								},
+								{
+									"name": "TV n°1",
+									"type": "tv",
+									"definition": "4K",
+									"dimensions": [
+										30,
+										40
+									]
+								}
+							]
+						}
+					],
+					"surface": 100
+				},
+				{
+					"name": "Etage n°2",
+					"rooms": [
+						{
+							"name": "Chambre n°1",
+							"surface": 10,
+							"furnitures": [
+								{
+									"bois": "Chêne",
+									"name": "Lit n°1",
+									"type": "bed"
+								},
+								{
+									"name": "Dressing n°1",
+									"type": "dressing",
+									"surface": 20
+								},
+								{
+									"name": "Dressing n°2",
+									"type": "dressing",
+									"surface": 10
+								},
+								{
+									"name": "TV n°1",
+									"type": "tv",
+									"definition": "4K",
+									"dimensions": [
+										20,
+										30
+									]
+								}
+							]
+						}
+					],
+					"surface": 200
+				}
+			]
+	 }
+]
+	
+function changeFloorIndex (index) {
+	floor = index
+// 	console.log(floor)
+}
+	
+function getFloorIndex () {
+	console.log(floor)
+}
+	
+function addItem (item) {
+	if(item === 'floor') {
+		const newItemIndex = data[0].floors.length + 1
+		data[0].floors = [...data[0].floors, {name: "Etage n°" + newItemIndex, rooms: []}]
+	} else if(item === 'room') {
+		console.log(floor)
+// 		const newItemIndex = data[0].floors[floor].rooms.length + 1
+// 		data[0].floors[floor].rooms = [...data[0].floors[floor].rooms, {name: "Pièce n°" + newItemIndex, furnitures: []}]
+	}
+}
+
+function handleKeypress (propertyName, floorName = null) {
+	if(!floorName) {
+		current = propertyName
+	} else {
+		current = propertyName + floorName
+	}
+}
+</script>
+
+{#each data as property, i}
+        <div class="house-ctn" class:show="{current === property.name}" class:hide="{current !== property.name}">
+            {#each property.floors as floor, a}
+                <div class="house-btn" on:click|self={() => handleKeypress(property.name, floor.name)} on:keypress|self={() => handleKeypress(property.name, floor.name)} on:click|self={() => changeFloorIndex(a)}>
+                    <div class="house-btn-item" on:click|self={() => handleKeypress(property.name, floor.name)} on:keypress|self={() => handleKeypress(property.name, floor.name)} on:click|self={() => changeFloorIndex(a)}>{floor.name}</div>
+                    <div class="floor-ctn" class:show="{current === property.name + floor.name}" class:hide="{current !== property.name + floor.name}">
+											<button on:click|self={() => handleKeypress(property.name, null)}>Back</button>
+                        {#each floor.rooms as room}
+                            <div class="floor-btn">
+                                <div class="floor-item">{room.name}</div>
+                            </div>
+                        {/each}
+											<button class="add-btn" on:click={() => handleKeypress('room-list')}>Ajouter une pièce</button>
+                    </div>
+                </div>
+            {/each}
+					<button class="add-btn" on:click={() => addItem('floor')}>Ajouter un étage</button>
+        </div>
+{/each}
+<div class="room-ctn" class:show="{current === 'room-list'}" class:hide="{current !== 'room-list'}">
+	<button on:click={getFloorIndex}>Back</button>
+	<ul>
+		<li>
+			<button on:click={() => addItem('room')}>Chambre</button>
+		</li>
+		<li>
+			<button>Cuisine</button>
+		</li>
+		<li>
+			<button>Salon</button>
+		</li>
+	</ul>
+</div>
+
+<style>
+	
+	.room-ctn {
+		padding: 15px;
+    border-radius: 5px;
+    background: lightgray;
+	}
+	
+	.add-btn {
+		display: block;
+		background-color: #0079f2;
+		color: #fff;
+		border-radius: 10px;
+		padding: 12px 12px;
+		cursor:pointer;
+	}
+	.add-btn:active {
+		background-color: #0066CC;
+	}
+	
+	.show {
+        position: fixed;
+        top: 30px;
+        right: 50%;
+        width: 90%;
+        max-width: 900px;
+        transform: translateX(50%);
+    }
+
+    .hide {
+        position: fixed;
+        left: -1000px;
+    }
+
+    /* House Level */
+
+    .house-ctn {
+        padding: 15px;
+        border-radius: 5px;
+        background: lightgray;
+    }
+
+    .house-btn {
+        display: flex;
+        padding: 15px;
+        border-radius: 5px;
+        background-color: #fff;
+        margin-bottom: 10px;
+        cursor: pointer;
+        outline: 1px solid transparent;
+        transition: all ease-in-out 200ms;
+    }
+
+    .house-btn:hover {
+        outline: 1px solid #000;
+    }
+
+    .house-btn:last-child {
+        margin-bottom: 0;
+    }
+
+    .house-btn-item {
+        margin-right: 20px;
+    }
+
+    /* Floor Level */
+
+     .floor-ctn {
+        padding: 15px;
+        border-radius: 5px;
+        background: lightgray;
+    }
+
+    .floor-btn {
+        display: flex;
+        padding: 15px;
+        border-radius: 5px;
+        background-color: #fff;
+        margin-bottom: 10px;
+        cursor: pointer;
+        outline: 1px solid transparent;
+        transition: all ease-in-out 200ms;
+    }
+
+    .floor-btn:hover {
+        outline: 1px solid #000;
+    }
+
+    .floor-btn:last-child {
+        margin-bottom: 0;
+    }  
+
+/*     .floor-btn-item {
+        margin-right: 20px;
+    } */
+
+    /* Room Level */
+
+/*     .room-ctn {
+        padding: 15px;
+        border-radius: 5px;
+        background: lightgray;
+    }
+
+    .room-btn {
+        display: flex;
+        padding: 15px;
+        border-radius: 5px;
+        background-color: #fff;
+        margin-bottom: 10px;
+        cursor: pointer;
+        outline: 1px solid transparent;
+        transition: all ease-in-out 200ms;
+    }
+
+    .room-btn:hover {
+        outline: 1px solid #000;
+    }
+
+    .room-btn:last-child {
+        margin-bottom: 0;
+    }
+
+    .room-btn-item {
+        margin-right: 20px;
+    } */
+	
+	ul {
+		list-style-type: none;
+		padding: 0;
+	}
+</style>
