@@ -6,6 +6,7 @@
     let floorIndex = null;
     let roomIndex = null;
     let furnitureIndex = null;
+    let addBtnRoomIndex = null;
 
     let data = [
         {
@@ -121,6 +122,11 @@
     function setFurnitureIndex(index) {
         furnitureIndex = index;
         console.log(furnitureIndex);
+    }
+
+    function setAddBtnRoomIndex(index) {
+        furnitureIndex = index;
+        console.log(addBtnRoomIndex);
     }
 
     function addItem(item, b, c) {
@@ -257,7 +263,15 @@
     }
 
     .room-list-ctn {
-        margin-top: 20px;
+        position: fixed;
+        right: 0;
+        top: 0;
+        width: 100px;
+        border: 1px solid #000;
+        border-radius: 0px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .add-btn {
